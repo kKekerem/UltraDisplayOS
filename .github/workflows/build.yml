@@ -1,0 +1,114 @@
+name: UltraDisplayOS Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  windows-build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Configure
+        # Uses the Visual Studio 2022 generator as specified in CMakePresets.json
+        run: cmake --preset windows-default
+
+      - name: Build
+        # Must use the build preset (windows-release) instead of the configure preset
+        run: cmake --build --preset windows-release
+
+      - name: Upload Windows Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: ultradisplay-server-windows
+          # Visual Studio generator places targets inside the config folder (Release)
+          path: build/Release/ultradisplay_server.exe
+
+  linux-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            build-essential \
+            cmake \
+            ninja-build \
+            pkg-config \
+            libdrm-dev \
+            libva-dev \
+            libasound2-dev \
+            libevdev-dev \
+            liburing-dev
+
+      - name: Configure
+        run: cmake --preset linux-default
+
+      - name: Build
+        # Must use the build preset (linux-release) instead of the configure preset
+        run: cmake --build --preset linux-release
+
+      - name: Upload Linux Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: ultradisplay-client-linux
+          # Ninja generator places targets directly in the build directory
+          path: build/ultradisplay_client
+
+  buildroot-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Buildroot dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y sed make binutils build-essential gcc g++ bash patch gzip bzip2 perl tar cpio unzip rsync file bc wget python3 cvs git mercurial subversion
+
+      - name: Download Buildroot
+        run: |
+          wget https://buildroot.org/downloads/buildroot-2023.11.1.tar.gz
+          tar -xvf buildroot-2023.11.1.tar.gz
+          mv buildroot-2023.11.1 buildroot-src
+
+      - name: Configure OS Image
+        run: |
+          # Copy custom configuration
+          cp buildroot/buildroot.config buildroot-src/.config
+          
+          # Copy board files
+          mkdir -p buildroot-src/board/ultradisplay
+          cp -r buildroot/board/ultradisplay/* buildroot-src/board/ultradisplay/
+          
+          cd buildroot-src
+          make olddefconfig
+
+      - name: Build OS Image
+        run: |
+          cd buildroot-src
+          # Warning: This compilation will take ~1-2 hours on standard GitHub Actions runners 
+          # because it builds the entire GCC toolchain and Linux Kernel from scratch.
+          make -j$(nproc)
+          
+          # Rename outputs for clarity
+          mv output/images/sdcard.img output/images/ultradisplay-os-installer.img
+          mv output/images/rootfs.iso9660 output/images/ultradisplay-os-live.iso
+
+      - name: Upload OS Images
+        uses: actions/upload-artifact@v4
+        with:
+          name: ultradisplay-os-images
+          path: |
+            buildroot-src/output/images/ultradisplay-os-installer.img
+            buildroot-src/output/images/ultradisplay-os-live.iso

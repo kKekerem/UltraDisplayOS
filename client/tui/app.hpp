@@ -12,6 +12,7 @@ enum class ScreenID {
     Home,
     Settings,
     Diagnostics,
+    Wifi,
     Pairing,
     Overlay // The F1 transparent overlay shown during streaming
 };
@@ -47,6 +48,7 @@ private:
     ftxui::Component settings_screen_;
     ftxui::Component diagnostics_screen_;
     ftxui::Component overlay_screen_;
+    ftxui::Component wifi_screen_; // Added Wi-Fi Screen
 
     ftxui::Component build_ui_tree();
 };

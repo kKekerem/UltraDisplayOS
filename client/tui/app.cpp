@@ -1,5 +1,6 @@
 #include "app.hpp"
 #include "theme.hpp"
+#include "screens/wifi_screen.hpp"
 #include <ftxui/component/event.hpp>
 
 using namespace ftxui;
@@ -18,6 +19,9 @@ Result<void> TuiApp::init() {
     settings_screen_ = Renderer([] { return text("Settings") | center; });
     diagnostics_screen_ = Renderer([] { return text("Diagnostics") | center; });
     overlay_screen_ = Renderer([] { return text("Overlay Active [Press F1 to Close]") | center | theme::window_box(); });
+    
+    auto wifi = std::make_shared<WifiScreen>();
+    wifi_screen_ = wifi->get_component();
 
     main_container_ = build_ui_tree();
     return Result<void>();
@@ -67,6 +71,7 @@ Component TuiApp::build_ui_tree() {
             case ScreenID::Home: current_view = home_screen_->Render(); break;
             case ScreenID::Settings: current_view = settings_screen_->Render(); break;
             case ScreenID::Diagnostics: current_view = diagnostics_screen_->Render(); break;
+            case ScreenID::Wifi: current_view = wifi_screen_->Render(); break;
             default: current_view = home_screen_->Render(); break;
         }
 
@@ -78,6 +83,10 @@ Component TuiApp::build_ui_tree() {
         if (e == Event::F1) {
             bool current = is_overlay_mode_.load(std::memory_order_acquire);
             set_overlay_mode(!current);
+            return true;
+        }
+        if (e == Event::F3) {
+            navigate_to(ScreenID::Wifi);
             return true;
         }
         if (e == Event::Escape && !is_overlay_mode_.load(std::memory_order_acquire)) {
