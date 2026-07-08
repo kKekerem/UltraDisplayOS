@@ -1,5 +1,6 @@
 #include "vaapi_decoder.hpp"
 #include <fcntl.h>
+#include <va/va_drmcommon.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <drm_fourcc.h>

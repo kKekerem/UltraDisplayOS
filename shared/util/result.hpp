@@ -3,7 +3,7 @@
 #include <system_error>
 #include <type_traits>
 #include <utility>
-
+#include <variant>
 namespace ud {
 
 enum class ErrorCode {
@@ -34,44 +34,36 @@ private:
 template <typename T, typename E = Error>
 class Result {
 public:
-    Result(T value) : has_value_(true), value_(std::move(value)) {}
-    Result(E error) : has_value_(false), error_(std::move(error)) {}
+    Result(T value) : data_(std::move(value)) {}
+    Result(E error) : data_(std::move(error)) {}
 
-    bool has_value() const { return has_value_; }
-    explicit operator bool() const { return has_value_; }
+    bool has_value() const { return std::holds_alternative<T>(data_); }
+    explicit operator bool() const { return has_value(); }
 
-    const T& value() const { return value_; }
-    T& value() { return value_; }
+    const T& value() const { return std::get<T>(data_); }
+    T& value() { return std::get<T>(data_); }
 
-    const E& error() const { return error_; }
-    E& error() { return error_; }
+    const E& error() const { return std::get<E>(data_); }
+    E& error() { return std::get<E>(data_); }
 
 private:
-    bool has_value_;
-    union {
-        T value_;
-        E error_;
-    };
+    std::variant<T, E> data_;
 };
 
 template <typename E>
 class Result<void, E> {
 public:
-    Result() : has_value_(true) {}
-    Result(E error) : has_value_(false), error_(std::move(error)) {}
+    Result() : data_(std::monostate{}) {}
+    Result(E error) : data_(std::move(error)) {}
 
-    bool has_value() const { return has_value_; }
-    explicit operator bool() const { return has_value_; }
+    bool has_value() const { return std::holds_alternative<std::monostate>(data_); }
+    explicit operator bool() const { return has_value(); }
 
-    const E& error() const { return error_; }
-    E& error() { return error_; }
+    const E& error() const { return std::get<E>(data_); }
+    E& error() { return std::get<E>(data_); }
 
 private:
-    bool has_value_;
-    union {
-        bool dummy_;
-        E error_;
-    };
+    std::variant<std::monostate, E> data_;
 };
 
 #define UD_TRY(expr) \

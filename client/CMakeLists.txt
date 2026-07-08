@@ -14,7 +14,7 @@ add_executable(ultradisplay_client
     tui/screens/wifi_screen.cpp
 )
 
-target_include_directories(ultradisplay_client PRIVATE ${CMAKE_SOURCE_DIR} /usr/include/libdrm)
+target_include_directories(ultradisplay_client PRIVATE ${CMAKE_SOURCE_DIR} /usr/include/libdrm /usr/include/libevdev-1.0)
 
 target_link_libraries(ultradisplay_client PRIVATE 
     shared

@@ -108,7 +108,7 @@ Result<CapturedFrame> DxgiCapture::acquire_next_frame(uint32_t timeout_ms) {
         return Error(ErrorCode::SystemError, "AcquireNextFrame failed");
     }
 
-    if (frame_info.LastPresentTime == 0) {
+    if (frame_info.LastPresentTime.QuadPart == 0) {
         // Frame not updated, release immediately
         desktop_dupl_->ReleaseFrame();
         return Error(ErrorCode::Timeout);
