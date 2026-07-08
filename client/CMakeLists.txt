@@ -14,7 +14,7 @@ add_executable(ultradisplay_client
     tui/screens/wifi_screen.cpp
 )
 
-target_include_directories(ultradisplay_client PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(ultradisplay_client PRIVATE ${CMAKE_SOURCE_DIR})
 
 target_link_libraries(ultradisplay_client PRIVATE 
     shared

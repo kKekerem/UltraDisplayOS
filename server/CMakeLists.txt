@@ -13,7 +13,7 @@ add_executable(ultradisplay_server
     network/server_transport.cpp
 )
 
-target_include_directories(ultradisplay_server PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(ultradisplay_server PRIVATE ${CMAKE_SOURCE_DIR})
 
 target_link_libraries(ultradisplay_server PRIVATE 
     shared
