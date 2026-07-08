@@ -11,7 +11,7 @@ SyncEngine::SyncEngine(std::shared_ptr<AlsaPlayback> audio, const ClockSync& clo
 
 void SyncEngine::schedule_presentation(const DecodedFrame& frame) {
     // 1. Get current remote time prediction from clock sync
-    int64_t current_remote_time = clock_sync_.get_remote_time_us();
+    int64_t current_remote_time = clock_sync_.local_to_remote(ud::now_us());
 
     // 2. We want to present when the frame's PTS is reached (plus target buffer offset)
     int64_t presentation_time = frame.pts_us + target_presentation_offset_us_;

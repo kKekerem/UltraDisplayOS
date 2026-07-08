@@ -1,5 +1,5 @@
 #include "shared/audio/audio_pipeline.hpp"
-#include <opus/opus.h>
+#include <opus.h>
 #include <stdexcept>
 #include <iostream>
 
