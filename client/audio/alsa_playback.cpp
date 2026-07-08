@@ -18,11 +18,11 @@ Result<void> AlsaPlayback::setup_hw_params() {
     snd_pcm_hw_params_alloca(&hw_params);
 
     if (snd_pcm_hw_params_any(pcm_handle_, hw_params) < 0) {
-        return Result<void>::create_error("Cannot configure this PCM device");
+        return ud::Error(ud::ErrorCode::SystemError, "Cannot configure this PCM device");
     }
 
     if (snd_pcm_hw_params_set_access(pcm_handle_, hw_params, SND_PCM_ACCESS_RW_INTERLEAVED) < 0) {
-        return Result<void>::create_error("Error setting access");
+        return ud::Error(ud::ErrorCode::SystemError, "Error setting access");
     }
 
     snd_pcm_format_t pcm_format = SND_PCM_FORMAT_FLOAT_LE;
@@ -31,27 +31,27 @@ Result<void> AlsaPlayback::setup_hw_params() {
     if (format_.bit_depth == 32) pcm_format = SND_PCM_FORMAT_FLOAT_LE;
 
     if (snd_pcm_hw_params_set_format(pcm_handle_, hw_params, pcm_format) < 0) {
-        return Result<void>::create_error("Error setting format");
+        return ud::Error(ud::ErrorCode::SystemError, "Error setting format");
     }
 
     unsigned int exact_rate = format_.sample_rate;
     int dir = 0;
     if (snd_pcm_hw_params_set_rate_near(pcm_handle_, hw_params, &exact_rate, &dir) < 0) {
-        return Result<void>::create_error("Error setting rate");
+        return ud::Error(ud::ErrorCode::SystemError, "Error setting rate");
     }
 
     if (snd_pcm_hw_params_set_channels(pcm_handle_, hw_params, format_.channels) < 0) {
-        return Result<void>::create_error("Error setting channels");
+        return ud::Error(ud::ErrorCode::SystemError, "Error setting channels");
     }
 
     snd_pcm_uframes_t frames = 1024;
     snd_pcm_hw_params_set_period_size_near(pcm_handle_, hw_params, &frames, &dir);
 
     if (snd_pcm_hw_params(pcm_handle_, hw_params) < 0) {
-        return Result<void>::create_error("Error setting HW params");
+        return ud::Error(ud::ErrorCode::SystemError, "Error setting HW params");
     }
 
-    return Result<void>::create_success();
+    return Result<void>();
 }
 
 Result<void> AlsaPlayback::init(const AudioFormat& format, const char* device_name) {
@@ -59,22 +59,22 @@ Result<void> AlsaPlayback::init(const AudioFormat& format, const char* device_na
 
     int err = snd_pcm_open(&pcm_handle_, device_name, SND_PCM_STREAM_PLAYBACK, 0);
     if (err < 0) {
-        return Result<void>::create_error("Cannot open audio device");
+        return ud::Error(ud::ErrorCode::SystemError, "Cannot open audio device");
     }
 
     auto res = setup_hw_params();
-    if (!res.is_success()) {
+    if (!res) {
         snd_pcm_close(pcm_handle_);
         pcm_handle_ = nullptr;
         return res;
     }
 
     snd_pcm_prepare(pcm_handle_);
-    return Result<void>::create_success();
+    return Result<void>();
 }
 
 Result<void> AlsaPlayback::write_frames(std::span<const float> pcm_data) {
-    if (!pcm_handle_) return Result<void>::create_error("PCM handle not initialized");
+    if (!pcm_handle_) return ud::Error(ud::ErrorCode::SystemError, "PCM handle not initialized");
 
     snd_pcm_sframes_t frames = pcm_data.size() / format_.channels;
     snd_pcm_sframes_t written = 0;
@@ -92,13 +92,13 @@ Result<void> AlsaPlayback::write_frames(std::span<const float> pcm_data) {
                 snd_pcm_prepare(pcm_handle_);
             }
         } else if (res < 0) {
-            return Result<void>::create_error("Error writing to PCM device");
+            return ud::Error(ud::ErrorCode::SystemError, "Error writing to PCM device");
         } else {
             written += res;
         }
     }
 
-    return Result<void>::create_success();
+    return Result<void>();
 }
 
 void AlsaPlayback::adjust_playback_rate(float rate_multiplier) {

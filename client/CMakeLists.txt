@@ -23,4 +23,7 @@ target_link_libraries(ultradisplay_client PRIVATE
     va-drm
     uring
     asound
+    ftxui::screen
+    ftxui::dom
+    ftxui::component
 )

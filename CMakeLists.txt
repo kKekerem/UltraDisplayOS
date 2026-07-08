@@ -31,6 +31,13 @@ FetchContent_Declare(
     GIT_TAG        v1.14.1
 )
 
+# Opus
+FetchContent_Declare(
+    opus
+    GIT_REPOSITORY https://github.com/xiph/opus.git
+    GIT_TAG        v1.5.2
+)
+
 # FTXUI (for Linux Client TUI)
 if(UNIX AND NOT APPLE)
     FetchContent_Declare(
@@ -40,7 +47,7 @@ if(UNIX AND NOT APPLE)
     )
 endif()
 
-FetchContent_MakeAvailable(googletest spdlog)
+FetchContent_MakeAvailable(googletest spdlog opus)
 if(UNIX AND NOT APPLE)
     FetchContent_MakeAvailable(ftxui)
 endif()

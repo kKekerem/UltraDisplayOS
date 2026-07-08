@@ -9,7 +9,7 @@ add_library(shared STATIC
 
 target_include_directories(shared PUBLIC ${CMAKE_SOURCE_DIR})
 
-target_link_libraries(shared PUBLIC spdlog::spdlog)
+target_link_libraries(shared PUBLIC spdlog::spdlog opus)
 
 if(UNIX AND NOT APPLE)
     target_link_libraries(shared PUBLIC pthread)
