@@ -9,11 +9,7 @@
     {
       "name": "windows-default",
       "displayName": "Windows x64 default",
-      "generator": "Visual Studio 17 2022",
-      "architecture": {
-        "value": "x64",
-        "strategy": "set"
-      },
+      "generator": "Ninja",
       "binaryDir": "${sourceDir}/build",
       "condition": {
         "type": "equals",
