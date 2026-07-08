@@ -7,6 +7,10 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
+#ifndef IP_TOS
+#define IP_TOS 8
+#endif
+
 namespace ud {
 
 struct ServerState {

@@ -1,4 +1,5 @@
 #include "server/input/virtual_input.hpp"
+#include <cstdint>
 #include <iostream>
 
 #ifndef EV_KEY
@@ -8,11 +9,16 @@
 #endif
 
 // A minimal replication of linux input_event for decoding
+struct linux_timeval {
+    int64_t tv_sec;
+    int64_t tv_usec;
+};
+
 struct linux_input_event {
-    struct timeval time;
-    unsigned short type;
-    unsigned short code;
-    unsigned int value;
+    linux_timeval time;
+    uint16_t type;
+    uint16_t code;
+    int32_t value;
 };
 
 namespace ud {
@@ -23,7 +29,7 @@ VirtualInput::~VirtualInput() {}
 
 Result<void> VirtualInput::init() {
     // In a real application, we might initialize virtual drivers here (e.g. ViGEm for gamepads)
-    return Result<void>::create_success();
+    return Result<void>();
 }
 
 void VirtualInput::inject_event(const InputEvent& event) {

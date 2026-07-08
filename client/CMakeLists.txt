@@ -14,6 +14,10 @@ add_executable(ultradisplay_client
     tui/screens/wifi_screen.cpp
 )
 
+set_target_properties(ultradisplay_client PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+)
+
 target_include_directories(ultradisplay_client PRIVATE ${CMAKE_SOURCE_DIR} /usr/include/libdrm /usr/include/libevdev-1.0)
 
 target_link_libraries(ultradisplay_client PRIVATE 

@@ -24,7 +24,7 @@ public:
 private:
     HINSTANCE hinstance_{nullptr};
     HWND hwnd_{nullptr};
-    NOTIFYICONDATA nid_{};
+    NOTIFYICONDATAA nid_{};
 
     static LRESULT CALLBACK window_proc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     void show_context_menu(POINT pt);

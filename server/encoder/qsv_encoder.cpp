@@ -1,4 +1,7 @@
 #include "qsv_encoder.hpp"
+#include "encoder_sdk_config.hpp"
+
+#if UD_HAS_QSV_SDK
 #include <vpl/mfx.h>
 #include <vpl/mfxvideo.h>
 #include <stdexcept>
@@ -120,3 +123,26 @@ Result<std::vector<EncodedPacket>> QsvEncoder::encode(Microsoft::WRL::ComPtr<ID3
 }
 
 } // namespace ud
+#else
+
+namespace ud {
+
+class QsvImpl {};
+
+QsvEncoder::QsvEncoder() = default;
+QsvEncoder::~QsvEncoder() = default;
+
+Result<void> QsvEncoder::init(Microsoft::WRL::ComPtr<ID3D11Device>, const EncoderConfig&) {
+    return Error(ErrorCode::NotImplemented, "QSV SDK headers are not available in this build");
+}
+
+Result<void> QsvEncoder::reconfigure(const EncoderConfig&) {
+    return Error(ErrorCode::NotImplemented, "QSV SDK headers are not available in this build");
+}
+
+Result<std::vector<EncodedPacket>> QsvEncoder::encode(Microsoft::WRL::ComPtr<ID3D11Texture2D>) {
+    return Error(ErrorCode::NotImplemented, "QSV SDK headers are not available in this build");
+}
+
+} // namespace ud
+#endif

@@ -1,4 +1,7 @@
 #include "amf_encoder.hpp"
+#include "encoder_sdk_config.hpp"
+
+#if UD_HAS_AMF_SDK
 #include <core/Factory.h>
 #include <core/Context.h>
 #include <components/VideoEncoderVCE.h>
@@ -130,3 +133,26 @@ Result<std::vector<EncodedPacket>> AmfEncoder::encode(Microsoft::WRL::ComPtr<ID3
 }
 
 } // namespace ud
+#else
+
+namespace ud {
+
+class AmfImpl {};
+
+AmfEncoder::AmfEncoder() = default;
+AmfEncoder::~AmfEncoder() = default;
+
+Result<void> AmfEncoder::init(Microsoft::WRL::ComPtr<ID3D11Device>, const EncoderConfig&) {
+    return Error(ErrorCode::NotImplemented, "AMF SDK headers are not available in this build");
+}
+
+Result<void> AmfEncoder::reconfigure(const EncoderConfig&) {
+    return Error(ErrorCode::NotImplemented, "AMF SDK headers are not available in this build");
+}
+
+Result<std::vector<EncodedPacket>> AmfEncoder::encode(Microsoft::WRL::ComPtr<ID3D11Texture2D>) {
+    return Error(ErrorCode::NotImplemented, "AMF SDK headers are not available in this build");
+}
+
+} // namespace ud
+#endif

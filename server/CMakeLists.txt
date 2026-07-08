@@ -1,4 +1,4 @@
-add_executable(ultradisplay_server
+add_executable(ultradisplay_server WIN32
     main.cpp
     audio/wasapi_capture.cpp
     capture/dxgi_capture.cpp
@@ -11,6 +11,12 @@ add_executable(ultradisplay_server
     encoder/qsv_encoder.cpp
     input/virtual_input.cpp
     network/server_transport.cpp
+    gui/tray_app.cpp
+    service/win_service.cpp
+)
+
+set_target_properties(ultradisplay_server PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
 )
 
 target_include_directories(ultradisplay_server PRIVATE ${CMAKE_SOURCE_DIR})
@@ -20,4 +26,6 @@ target_link_libraries(ultradisplay_server PRIVATE
     d3d11
     dxgi
     ws2_32
+    shell32
+    advapi32
 )

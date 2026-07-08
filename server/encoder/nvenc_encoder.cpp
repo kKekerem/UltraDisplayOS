@@ -1,5 +1,8 @@
 #include "nvenc_encoder.hpp"
+#include "encoder_sdk_config.hpp"
 #include "shared/util/log.hpp"
+
+#if UD_HAS_NVENC_SDK
 #include <nvEncodeAPI.h>
 #include <stdexcept>
 
@@ -192,3 +195,26 @@ Result<std::vector<EncodedPacket>> NvencEncoder::encode(Microsoft::WRL::ComPtr<I
 }
 
 } // namespace ud
+#else
+
+namespace ud {
+
+class NvencImpl {};
+
+NvencEncoder::NvencEncoder() = default;
+NvencEncoder::~NvencEncoder() = default;
+
+Result<void> NvencEncoder::init(Microsoft::WRL::ComPtr<ID3D11Device>, const EncoderConfig&) {
+    return Error(ErrorCode::NotImplemented, "NVENC SDK headers are not available in this build");
+}
+
+Result<void> NvencEncoder::reconfigure(const EncoderConfig&) {
+    return Error(ErrorCode::NotImplemented, "NVENC SDK headers are not available in this build");
+}
+
+Result<std::vector<EncodedPacket>> NvencEncoder::encode(Microsoft::WRL::ComPtr<ID3D11Texture2D>) {
+    return Error(ErrorCode::NotImplemented, "NVENC SDK headers are not available in this build");
+}
+
+} // namespace ud
+#endif

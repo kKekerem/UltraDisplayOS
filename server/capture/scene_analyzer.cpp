@@ -81,10 +81,10 @@ bool SceneAnalyzer::rects_intersect(const RECT& a, const RECT& b) const {
 
 RECT SceneAnalyzer::merge(const RECT& a, const RECT& b) const {
     return RECT{
-        std::min(a.left, b.left),
-        std::min(a.top, b.top),
-        std::max(a.right, b.right),
-        std::max(a.bottom, b.bottom)
+        (std::min)(a.left, b.left),
+        (std::min)(a.top, b.top),
+        (std::max)(a.right, b.right),
+        (std::max)(a.bottom, b.bottom)
     };
 }
 
