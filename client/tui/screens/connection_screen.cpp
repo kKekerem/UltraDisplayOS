@@ -58,6 +58,7 @@ ftxui::Component ConnectionOverlay::build_ui() {
             separator(),
             text("Latency History") | color(theme::TextDim) | center,
             graph([this](int width, int height) {
+                (void)height;
                 std::vector<int> output(width, 0);
                 int step = std::max(1, (int)latency_history_.size() / width);
                 for (int i = 0; i < width; ++i) {
