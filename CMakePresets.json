@@ -11,6 +11,9 @@
       "displayName": "Windows x64 default",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      },
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
@@ -22,6 +25,9 @@
       "displayName": "Linux default",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      },
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",

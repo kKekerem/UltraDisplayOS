@@ -31,6 +31,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ultradisplay-server-windows
+          if-no-files-found: error
           path: build/ultradisplay_server.exe
 
   linux-build:
@@ -65,7 +66,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ultradisplay-client-linux
-          # Ninja generator places targets directly in the build directory
+          if-no-files-found: error
           path: build/ultradisplay_client
 
   buildroot-image:
@@ -78,6 +79,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y sed make binutils build-essential gcc g++ bash patch gzip bzip2 perl tar cpio unzip rsync file bc wget python3 cvs git mercurial subversion
+          sudo apt install -y flex bison libssl-dev libelf-dev xorriso
 
       - name: Download Buildroot
         run: |
@@ -105,13 +107,12 @@ jobs:
           make -j$(nproc)
           
           # Rename outputs for clarity
-          mv output/images/sdcard.img output/images/ultradisplay-os-installer.img
+          test -f output/images/rootfs.iso9660
           mv output/images/rootfs.iso9660 output/images/ultradisplay-os-live.iso
 
       - name: Upload OS Images
         uses: actions/upload-artifact@v4
         with:
-          name: ultradisplay-os-images
-          path: |
-            buildroot-src/output/images/ultradisplay-os-installer.img
-            buildroot-src/output/images/ultradisplay-os-live.iso
+          name: ultradisplay-os-live-iso
+          if-no-files-found: error
+          path: buildroot-src/output/images/ultradisplay-os-live.iso

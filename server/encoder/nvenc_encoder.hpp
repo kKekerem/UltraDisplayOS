@@ -1,6 +1,7 @@
 #pragma once
 
 #include "encoder.hpp"
+#include <memory>
 
 namespace ud {
 

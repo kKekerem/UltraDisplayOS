@@ -7,13 +7,10 @@ using namespace ftxui;
 
 namespace ud {
 
-TuiApp::TuiApp() = default;
+TuiApp::TuiApp() : screen_(ScreenInteractive::Fullscreen()) {}
 TuiApp::~TuiApp() = default;
 
 Result<void> TuiApp::init() {
-    auto screen_options = ScreenInteractive::Fullscreen();
-    screen_ = std::make_shared<ScreenInteractive>(screen_options);
-
     // Mock up empty components for now
     home_screen_ = Renderer([] { return text("Home Screen") | center; });
     settings_screen_ = Renderer([] { return text("Settings") | center; });
@@ -28,15 +25,11 @@ Result<void> TuiApp::init() {
 }
 
 void TuiApp::run() {
-    if (screen_) {
-        screen_->Loop(main_container_);
-    }
+    screen_.Loop(main_container_);
 }
 
 void TuiApp::exit() {
-    if (screen_) {
-        screen_->Exit();
-    }
+    screen_.Exit();
 }
 
 void TuiApp::set_overlay_mode(bool is_overlay) {
@@ -55,15 +48,9 @@ void TuiApp::navigate_to(ScreenID screen) {
 }
 
 Component TuiApp::build_ui_tree() {
-    auto tab_selection = std::make_shared<int>(0);
-    
     auto main_renderer = Renderer([this] {
         if (is_overlay_mode_.load(std::memory_order_acquire)) {
-            // Draw transparent background with overlay box on top
-            return dbox({
-                emptyElement() | bgcolor(Color::Transparent),
-                overlay_screen_->Render() | center
-            });
+            return overlay_screen_->Render() | center;
         }
 
         Element current_view;

@@ -3,8 +3,8 @@
 #include "shared/util/result.hpp"
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/component/component.hpp>
-#include <memory>
 #include <atomic>
+#include <memory>
 
 namespace ud {
 
@@ -37,7 +37,7 @@ public:
     void navigate_to(ScreenID screen);
 
 private:
-    std::shared_ptr<ftxui::ScreenInteractive> screen_;
+    ftxui::ScreenInteractive screen_;
     ftxui::Component main_container_;
     
     std::atomic<bool> is_overlay_mode_{false};
