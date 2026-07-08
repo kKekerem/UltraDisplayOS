@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# UltraDisplay OS Initial RAM FS & System Init
+# This script runs directly after the Linux kernel boots.
+
+export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+# 1. Mount virtual filesystems
+mount -t proc none /proc
+mount -t sysfs none /sys
+mount -t devtmpfs none /dev
+mount -t tmpfs tmpfs /tmp -o size=256M
+
+# 2. Extract Apple Firmware (if running on a Mac)
+# Broadcom firmware often needs to be extracted from the macOS partition if present,
+# or loaded from the persistent data partition.
+if [ -d /sys/class/net/wlan0 ]; then
+    echo "Wi-Fi firmware already loaded."
+else
+    # Load broadcom blobs from the data partition
+    mount /dev/sda4 /mnt/data
+    if [ -d /mnt/data/firmware ]; then
+        cp -r /mnt/data/firmware/* /lib/firmware/
+        rmmod brcmfmac 2>/dev/null
+        modprobe brcmfmac
+    fi
+    umount /mnt/data
+fi
+
+# 3. Mount persistent data partition for settings
+mount /dev/sda4 /var/lib/ultradisplay
+
+# 4. Bring up loopback and networking
+ifconfig lo 127.0.0.1 up
+
+# Start avahi daemon in background for mDNS discovery
+mkdir -p /var/run/avahi-daemon
+avahi-daemon --daemonize
+
+# 5. Launch UltraDisplay Client
+# This runs indefinitely on tty1
+echo "Starting UltraDisplay OS Client..."
+exec /usr/bin/ultradisplay_client

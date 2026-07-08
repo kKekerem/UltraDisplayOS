@@ -1,0 +1,13 @@
+---
+Language: Cpp
+BasedOnStyle: Google
+ColumnLimit: 120
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+SortIncludes: CaseInsensitive
+AlignConsecutiveDeclarations: true
+AlignConsecutiveAssignments: true
+PointerAlignment: Left
+ReflowComments: true
+...
