@@ -31,7 +31,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ultradisplay-server-windows
-          path: build/server/ultradisplay_server.exe
+          path: |
+            build/server/ultradisplay_server.exe
+            build/server/*.dll
 
   linux-build:
     runs-on: ubuntu-latest

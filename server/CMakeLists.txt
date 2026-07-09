@@ -37,3 +37,11 @@ target_link_libraries(ultradisplay_server PRIVATE
     iphlpapi
     VPL
 )
+
+# Copy runtime DLLs (like libvpld.dll) next to the executable
+add_custom_command(TARGET ultradisplay_server POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    $<TARGET_RUNTIME_DLLS:ultradisplay_server>
+    $<TARGET_FILE_DIR:ultradisplay_server>
+    COMMAND_EXPAND_LISTS
+)

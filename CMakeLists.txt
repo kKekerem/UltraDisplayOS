@@ -84,7 +84,6 @@ if(WIN32)
     
     set(BUILD_TOOLS OFF CACHE BOOL "Disable oneVPL tools" FORCE)
     set(BUILD_EXAMPLES OFF CACHE BOOL "Disable oneVPL examples" FORCE)
-    set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build oneVPL as static library" FORCE)
     FetchContent_MakeAvailable(vpl)
 endif()
 if(UNIX AND NOT APPLE)
