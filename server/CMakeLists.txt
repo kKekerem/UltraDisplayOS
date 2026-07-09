@@ -1,5 +1,7 @@
-add_executable(ultradisplay_server
+add_executable(ultradisplay_server WIN32
     main.cpp
+    gui/tray_app.cpp
+    gui/discovery.cpp
     audio/wasapi_capture.cpp
     capture/dxgi_capture.cpp
     capture/scene_analyzer.cpp
@@ -20,4 +22,6 @@ target_link_libraries(ultradisplay_server PRIVATE
     d3d11
     dxgi
     ws2_32
+    comctl32
+    iphlpapi
 )

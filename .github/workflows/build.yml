@@ -77,7 +77,9 @@ jobs:
       - name: Install Buildroot dependencies
         run: |
           sudo apt update
-          sudo apt install -y sed make binutils build-essential gcc g++ bash patch gzip bzip2 perl tar cpio unzip rsync file bc wget python3 cvs git mercurial subversion
+          sudo apt install -y sed make binutils build-essential gcc g++ bash patch \
+            gzip bzip2 perl tar cpio unzip rsync file bc wget python3 cvs git \
+            mercurial subversion xorriso grub2-common grub-pc-bin mtools dosfstools
 
       - name: Download Buildroot
         run: |
@@ -103,15 +105,11 @@ jobs:
           # Warning: This compilation will take ~1-2 hours on standard GitHub Actions runners 
           # because it builds the entire GCC toolchain and Linux Kernel from scratch.
           make -j$(nproc)
-          
-          # Rename outputs for clarity
-          mv output/images/sdcard.img output/images/ultradisplay-os-installer.img
-          mv output/images/rootfs.iso9660 output/images/ultradisplay-os-live.iso
 
       - name: Upload OS Images
         uses: actions/upload-artifact@v4
         with:
           name: ultradisplay-os-images
           path: |
-            buildroot-src/output/images/ultradisplay-os-installer.img
-            buildroot-src/output/images/ultradisplay-os-live.iso
+            buildroot-src/output/images/ultradisplay-os.iso
+            buildroot-src/output/images/sdcard.img
