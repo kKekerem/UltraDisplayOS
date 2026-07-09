@@ -90,8 +90,9 @@ jobs:
           path: |
             ~/.buildroot-ccache
             ~/.buildroot-dl
-          key: ${{ runner.os }}-buildroot-${{ hashFiles('buildroot/buildroot.config') }}
+          key: ${{ runner.os }}-buildroot-v2-${{ hashFiles('buildroot/buildroot.config') }}
           restore-keys: |
+            ${{ runner.os }}-buildroot-v2-
             ${{ runner.os }}-buildroot-
 
       - name: Download Buildroot
@@ -118,6 +119,11 @@ jobs:
           cd buildroot-src
           make olddefconfig
 
+      - name: Clear potentially corrupted downloads
+        run: |
+          rm -f /home/runner/.buildroot-dl/squashfs/squashfs-4.6.1.tar.gz || true
+          rm -rf /home/runner/.buildroot-dl/squashfs || true
+
       - name: Build OS Image
         run: |
           cd buildroot-src
@@ -132,3 +138,10 @@ jobs:
           path: |
             buildroot-src/output/images/ultradisplay-os.iso
             buildroot-src/output/images/sdcard.img
+
+      - name: Diagnostic listing
+        if: failure()
+        run: |
+          ls -la buildroot-src/output/images || true
+          ls -la buildroot-src/output || true
+          tail -n 200 buildroot-src/output/build/*/build.log || true
