@@ -75,7 +75,7 @@ cp "${BINARIES_DIR}/grub-efi.efi" "${ISO_DIR}/EFI/BOOT/BOOTX64.EFI"
 # --- BIOS Boot Setup ---
 # Generate BIOS GRUB boot image for El Torito
 GRUB_MODULES="biosdisk iso9660 normal search linux configfile part_msdos part_gpt fat ext2 ls cat echo test true"
-grub-mkimage -O i386-pc -o "${ISO_DIR}/boot/grub/core.img" \
+/usr/bin/grub-mkimage -O i386-pc -d /usr/lib/grub/i386-pc -o "${ISO_DIR}/boot/grub/core.img" \
     -p /boot/grub \
     ${GRUB_MODULES}
 
