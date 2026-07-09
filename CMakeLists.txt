@@ -82,6 +82,8 @@ if(WIN32)
         FetchContent_Populate(amf)
     endif()
     
+    set(BUILD_TOOLS OFF CACHE BOOL "Disable oneVPL tools" FORCE)
+    set(BUILD_EXAMPLES OFF CACHE BOOL "Disable oneVPL examples" FORCE)
     FetchContent_MakeAvailable(vpl)
 endif()
 if(UNIX AND NOT APPLE)
