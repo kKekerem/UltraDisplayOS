@@ -82,7 +82,7 @@ jobs:
           sudo apt install -y sed make binutils build-essential gcc g++ bash patch \
             gzip bzip2 perl tar cpio unzip rsync file bc wget python3 cvs git \
             mercurial subversion xorriso grub2-common grub-pc-bin mtools dosfstools \
-            libelf-dev libssl-dev flex bison
+            libelf-dev libssl-dev flex bison genimage
 
       - name: Cache Buildroot downloads and ccache
         uses: actions/cache@v4
