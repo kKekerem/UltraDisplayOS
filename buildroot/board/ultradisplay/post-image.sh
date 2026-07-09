@@ -16,7 +16,12 @@ BINARIES_DIR="${BINARIES_DIR:-${BUILD_DIR}/../images}"
 GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
 GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
 
+# Buildroot outputs the EFI payload into efi-part/EFI/BOOT/bootx64.efi by default
+cp "${BINARIES_DIR}/efi-part/EFI/BOOT/bootx64.efi" "${BINARIES_DIR}/grub-efi.efi" || true
+
 rm -rf "${GENIMAGE_TMP}"
+
+cp "${BOARD_DIR}/grub.cfg" "${BINARIES_DIR}/grub.cfg"
 
 genimage \
     --rootpath "${TARGET_DIR}" \
