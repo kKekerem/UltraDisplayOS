@@ -84,6 +84,16 @@ jobs:
             mercurial subversion xorriso grub2-common grub-pc-bin mtools dosfstools \
             libelf-dev libssl-dev flex bison
 
+      - name: Cache Buildroot downloads and ccache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.buildroot-ccache
+            ~/.buildroot-dl
+          key: ${{ runner.os }}-buildroot-${{ hashFiles('buildroot/buildroot.config') }}
+          restore-keys: |
+            ${{ runner.os }}-buildroot-
+
       - name: Download Buildroot
         run: |
           wget https://buildroot.org/downloads/buildroot-2023.11.1.tar.gz
@@ -98,6 +108,12 @@ jobs:
           # Copy board files
           mkdir -p buildroot-src/board/ultradisplay
           cp -r buildroot/board/ultradisplay/* buildroot-src/board/ultradisplay/
+          
+          mkdir -p ~/.buildroot-ccache
+          mkdir -p ~/.buildroot-dl
+          echo 'BR2_CCACHE=y' >> buildroot-src/.config
+          echo 'BR2_CCACHE_DIR="/home/runner/.buildroot-ccache"' >> buildroot-src/.config
+          echo 'BR2_DL_DIR="/home/runner/.buildroot-dl"' >> buildroot-src/.config
           
           cd buildroot-src
           make olddefconfig
