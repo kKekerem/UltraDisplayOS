@@ -4,6 +4,7 @@
 #include <queue>
 #include <unordered_map>
 #include <condition_variable>
+#include <ws2tcpip.h>
 
 #pragma comment(lib, "ws2_32.lib")
 

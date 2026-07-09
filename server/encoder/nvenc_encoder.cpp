@@ -51,7 +51,7 @@ public:
         NV_ENC_INITIALIZE_PARAMS init_params = {};
         init_params.version = NV_ENC_INITIALIZE_PARAMS_VER;
         init_params.encodeGUID = get_codec_guid(config.codec);
-        init_params.presetGUID = NV_ENC_PRESET_LOW_LATENCY_DEFAULT_GUID;
+        init_params.presetGUID = NV_ENC_PRESET_P1_GUID;
         init_params.encodeWidth = 1920; 
         init_params.encodeHeight = 1080;
         init_params.darWidth = 1920;
@@ -129,10 +129,10 @@ public:
         pic_params.version = NV_ENC_PIC_PARAMS_VER;
         pic_params.inputWidth = 1920;
         pic_params.inputHeight = 1080;
-        pic_params.inputPitch = map_res.mappedPitch;
+        pic_params.inputPitch = pic_params.inputWidth;
         pic_params.inputBuffer = map_res.mappedResource;
         pic_params.outputBitstream = bitstream_buffer_;
-        pic_params.bufferFmt = map_res.mappedFormat;
+        pic_params.bufferFmt = map_res.mappedBufferFmt;
         pic_params.pictureStruct = NV_ENC_PIC_STRUCT_FRAME;
         
         if (nvenc_funcs_.nvEncEncodePicture(encoder_, &pic_params) != NV_ENC_SUCCESS) {

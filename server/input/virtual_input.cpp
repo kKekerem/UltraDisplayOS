@@ -1,5 +1,6 @@
 #include "server/input/virtual_input.hpp"
 #include <iostream>
+#include <winsock2.h>
 
 #ifndef EV_KEY
 #define EV_KEY 0x01
@@ -23,7 +24,7 @@ VirtualInput::~VirtualInput() {}
 
 Result<void> VirtualInput::init() {
     // In a real application, we might initialize virtual drivers here (e.g. ViGEm for gamepads)
-    return Result<void>::create_success();
+    return {};
 }
 
 void VirtualInput::inject_event(const InputEvent& event) {
