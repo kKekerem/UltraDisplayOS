@@ -34,5 +34,5 @@ target_link_libraries(ultradisplay_server PRIVATE
     ws2_32
     comctl32
     iphlpapi
-    vpl
+    VPL
 )
