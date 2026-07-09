@@ -4,7 +4,7 @@
 #include "shared/audio/audio_pipeline.hpp"
 #include <memory>
 
-#define WIN32_LEAN_AND_MEAN
+
 #include <windows.h>
 #include <audioclient.h>
 #include <mmdeviceapi.h>

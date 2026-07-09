@@ -10,6 +10,8 @@
 using namespace ud;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+    (void)hPrevInstance;
+    (void)nCmdShow;
     bool is_service = false;
     std::string cmd_line(lpCmdLine);
     

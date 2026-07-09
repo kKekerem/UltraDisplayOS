@@ -3,7 +3,7 @@
 // winsock2.h MUST come before windows.h to avoid redefinition errors
 #include <winsock2.h>
 
-#define WIN32_LEAN_AND_MEAN
+
 #include <windows.h>
 #include <shellapi.h>
 #include <commctrl.h>

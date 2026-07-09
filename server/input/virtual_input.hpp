@@ -3,7 +3,7 @@
 #include "shared/util/result.hpp"
 #include "client/input/input_forwarder.hpp" // For InputEvent struct definition
 
-#define WIN32_LEAN_AND_MEAN
+
 #include <windows.h>
 
 namespace ud {

@@ -4,7 +4,7 @@
 #include "qsv_encoder.hpp"
 #include "shared/util/log.hpp"
 
-#define WIN32_LEAN_AND_MEAN
+
 #include <windows.h>
 
 namespace ud {

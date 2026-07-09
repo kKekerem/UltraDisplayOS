@@ -18,8 +18,9 @@ add_executable(ultradisplay_server WIN32
 target_include_directories(ultradisplay_server PRIVATE ${CMAKE_SOURCE_DIR})
 
 # WIN32_LEAN_AND_MEAN prevents windows.h from including winsock.h (conflicts with winsock2.h)
+# NOMINMAX prevents windows.h from defining min/max macros (conflicts with std::min/max)
 # UNICODE/_UNICODE ensures all Win32 APIs use wide-char variants consistently
-target_compile_definitions(ultradisplay_server PRIVATE WIN32_LEAN_AND_MEAN UNICODE _UNICODE)
+target_compile_definitions(ultradisplay_server PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX UNICODE _UNICODE)
 
 target_link_libraries(ultradisplay_server PRIVATE 
     shared
