@@ -5,6 +5,7 @@
 #include <atomic>
 #include <mutex>
 #include <queue>
+#include <string>
 
 
 #include <windows.h>
@@ -19,6 +20,7 @@ public:
     ~ServerTransport() override;
 
     Result<void> init(uint16_t bind_port);
+    Result<void> connect_to(const std::string& ip, uint16_t port) override;
 
     // ITransport implementation
     Result<void> send(std::span<const uint8_t> payload, uint8_t stream_id) override;

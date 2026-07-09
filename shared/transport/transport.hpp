@@ -19,6 +19,9 @@ class ITransport {
 public:
     virtual ~ITransport() = default;
 
+    // Connect to peer (for UDP, this sets default destination address)
+    virtual Result<void> connect_to(const std::string& ip, uint16_t port) = 0;
+
     // Send a raw packet payload. Transport handles framing/headers.
     virtual Result<void> send(std::span<const uint8_t> payload, uint8_t stream_id) = 0;
     

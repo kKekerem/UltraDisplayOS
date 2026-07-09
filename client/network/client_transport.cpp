@@ -2,6 +2,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
+#include <arpa/inet.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <cstring>
@@ -86,6 +87,20 @@ Result<void> ClientTransport::init(uint16_t bind_port) {
     running_ = true;
     poll_thread_ = std::thread(&ClientTransport::poll_loop, this);
 
+    return Result<void>();
+}
+
+Result<void> ClientTransport::connect_to(const std::string& ip, uint16_t port) {
+    sockaddr_in addr{};
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(port);
+    if (inet_pton(AF_INET, ip.c_str(), &addr.sin_addr) <= 0) {
+        return Error(ErrorCode::NetworkError, "Invalid IP address");
+    }
+
+    if (connect(socket_fd_, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0) {
+        return Error(ErrorCode::NetworkError, "Failed to connect UDP socket");
+    }
     return Result<void>();
 }
 

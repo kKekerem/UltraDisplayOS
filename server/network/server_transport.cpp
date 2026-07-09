@@ -88,6 +88,18 @@ Result<void> ServerTransport::init(uint16_t bind_port) {
     return Result<void>();
 }
 
+Result<void> ServerTransport::connect_to(const std::string& ip, uint16_t port) {
+    sockaddr_in addr{};
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(port);
+    inet_pton(AF_INET, ip.c_str(), &addr.sin_addr);
+
+    if (connect(socket_, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == SOCKET_ERROR) {
+        return Error(ErrorCode::NetworkError, "Failed to connect UDP socket");
+    }
+    return Result<void>();
+}
+
 void ServerTransport::post_receive() {
     auto* ctx = new IoContext{};
     ZeroMemory(&ctx->overlapped, sizeof(WSAOVERLAPPED));

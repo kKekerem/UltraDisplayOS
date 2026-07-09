@@ -55,27 +55,22 @@ void TuiApp::navigate_to(ScreenID screen) {
 }
 
 Component TuiApp::build_ui_tree() {
-    auto tab_selection = std::make_shared<int>(0);
-    
-    auto main_renderer = Renderer([this] {
+    // Use a Tab container to actually route events to the active component
+    auto tab_container = Container::Tab({
+        home_screen_,
+        settings_screen_,
+        diagnostics_screen_,
+        wifi_screen_
+    }, (int*)&current_screen_);
+
+    auto main_renderer = Renderer(tab_container, [this, tab_container] {
         if (is_overlay_mode_.load(std::memory_order_acquire)) {
-            // Draw transparent background with overlay box on top
             return dbox({
                 emptyElement() | bgcolor(Color::Transparent),
                 overlay_screen_->Render() | center
             });
         }
-
-        Element current_view;
-        switch (current_screen_) {
-            case ScreenID::Home: current_view = home_screen_->Render(); break;
-            case ScreenID::Settings: current_view = settings_screen_->Render(); break;
-            case ScreenID::Diagnostics: current_view = diagnostics_screen_->Render(); break;
-            case ScreenID::Wifi: current_view = wifi_screen_->Render(); break;
-            default: current_view = home_screen_->Render(); break;
-        }
-
-        return current_view | bgcolor(theme::Background);
+        return tab_container->Render() | bgcolor(theme::Background);
     });
 
     // Handle global F1 keypress
