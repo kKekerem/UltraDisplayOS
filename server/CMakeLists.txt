@@ -13,6 +13,7 @@ add_executable(ultradisplay_server WIN32
     encoder/qsv_encoder.cpp
     input/virtual_input.cpp
     network/server_transport.cpp
+    service/win_service.cpp
 )
 
 target_include_directories(ultradisplay_server PRIVATE 
