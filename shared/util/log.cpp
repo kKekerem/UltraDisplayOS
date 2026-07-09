@@ -3,6 +3,7 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/async.h>
 #include <atomic>
+#include <vector>
 
 namespace ud {
 

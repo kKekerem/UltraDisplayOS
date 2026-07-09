@@ -1,6 +1,7 @@
 #include "connection_screen.hpp"
 #include "client/tui/theme.hpp"
 #include <ftxui/dom/elements.hpp>
+#include <algorithm>
 
 using namespace ftxui;
 

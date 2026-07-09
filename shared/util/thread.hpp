@@ -7,6 +7,7 @@
 #include <windows.h>
 #else
 #include <pthread.h>
+#include <sched.h>
 #endif
 
 namespace ud {

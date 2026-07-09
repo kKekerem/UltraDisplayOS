@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <cstring>
 #include <stdexcept>
+#include <algorithm>
 #include <iostream>
 #include <mutex>
 #include <queue>

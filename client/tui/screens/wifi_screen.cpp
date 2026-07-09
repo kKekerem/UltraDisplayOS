@@ -6,6 +6,7 @@
 #include <memory>
 #include <array>
 #include <cstdio>
+#include <algorithm>
 
 using namespace ftxui;
 

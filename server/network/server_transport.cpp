@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <condition_variable>
 #include <ws2tcpip.h>
+#include <algorithm>
 
 #pragma comment(lib, "ws2_32.lib")
 
