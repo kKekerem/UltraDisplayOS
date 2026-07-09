@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ultradisplay-server-windows
-          path: build/ultradisplay_server.exe
+          path: build/server/ultradisplay_server.exe
 
   linux-build:
     runs-on: ubuntu-latest
@@ -65,8 +65,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ultradisplay-client-linux
-          # Ninja generator places targets directly in the build directory
-          path: build/ultradisplay_client
+          # Ninja generator places targets in their subdirectory folders under build
+          path: build/client/ultradisplay_client
 
   buildroot-image:
     runs-on: ubuntu-latest
