@@ -11,18 +11,15 @@ namespace ud {
 
 Result<std::unique_ptr<IEncoder>> EncoderFactory::create(VideoCodec codec) {
     if (is_nvenc_available()) {
-        auto encoder = std::make_unique<NvencEncoder>();
-        return std::move(encoder);
+        return std::unique_ptr<IEncoder>(new NvencEncoder());
     }
     
     if (is_amf_available()) {
-        auto encoder = std::make_unique<AmfEncoder>();
-        return std::move(encoder);
+        return std::unique_ptr<IEncoder>(new AmfEncoder());
     }
     
     if (is_qsv_available()) {
-        auto encoder = std::make_unique<QsvEncoder>();
-        return std::move(encoder);
+        return std::unique_ptr<IEncoder>(new QsvEncoder());
     }
 
     return Error(ErrorCode::NotImplemented, "No supported hardware encoder found");

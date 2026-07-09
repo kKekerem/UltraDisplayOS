@@ -38,6 +38,29 @@ FetchContent_Declare(
     GIT_TAG        v1.5.2
 )
 
+if(WIN32)
+    # NVIDIA Codec Headers
+    FetchContent_Declare(
+        nvenc
+        GIT_REPOSITORY https://github.com/FFmpeg/nv-codec-headers.git
+        GIT_TAG        n12.1.14.0
+    )
+
+    # AMD AMF SDK
+    FetchContent_Declare(
+        amf
+        GIT_REPOSITORY https://github.com/GPUOpen-LibrariesAndSDKs/AMF.git
+        GIT_TAG        v1.4.33
+    )
+
+    # Intel oneVPL
+    FetchContent_Declare(
+        vpl
+        GIT_REPOSITORY https://github.com/oneapi-src/oneVPL.git
+        GIT_TAG        v2023.4.0
+    )
+endif()
+
 # FTXUI (for Linux Client TUI)
 if(UNIX AND NOT APPLE)
     FetchContent_Declare(
@@ -48,6 +71,19 @@ if(UNIX AND NOT APPLE)
 endif()
 
 FetchContent_MakeAvailable(googletest spdlog opus)
+if(WIN32)
+    FetchContent_GetProperties(nvenc)
+    if(NOT nvenc_POPULATED)
+        FetchContent_Populate(nvenc)
+    endif()
+    
+    FetchContent_GetProperties(amf)
+    if(NOT amf_POPULATED)
+        FetchContent_Populate(amf)
+    endif()
+    
+    FetchContent_MakeAvailable(vpl)
+endif()
 if(UNIX AND NOT APPLE)
     FetchContent_MakeAvailable(ftxui)
 endif()

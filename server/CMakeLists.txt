@@ -15,7 +15,12 @@ add_executable(ultradisplay_server WIN32
     network/server_transport.cpp
 )
 
-target_include_directories(ultradisplay_server PRIVATE ${CMAKE_SOURCE_DIR})
+target_include_directories(ultradisplay_server PRIVATE 
+    ${CMAKE_SOURCE_DIR}
+    ${nvenc_SOURCE_DIR}/include/ffnvcodec
+    ${amf_SOURCE_DIR}/amf/public/include
+    ${vpl_SOURCE_DIR}/api
+)
 
 # WIN32_LEAN_AND_MEAN prevents windows.h from including winsock.h (conflicts with winsock2.h)
 # NOMINMAX prevents windows.h from defining min/max macros (conflicts with std::min/max)
@@ -29,4 +34,5 @@ target_link_libraries(ultradisplay_server PRIVATE
     ws2_32
     comctl32
     iphlpapi
+    vpl
 )
