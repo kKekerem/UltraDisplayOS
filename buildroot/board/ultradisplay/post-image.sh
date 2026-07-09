@@ -16,8 +16,17 @@ BINARIES_DIR="${BINARIES_DIR:-${BUILD_DIR}/../images}"
 GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
 GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
 
-# Buildroot outputs the EFI payload into efi-part/EFI/BOOT/bootx64.efi by default
-cp "${BINARIES_DIR}/efi-part/EFI/BOOT/bootx64.efi" "${BINARIES_DIR}/grub-efi.efi" || true
+# Buildroot outputs the EFI payload into different locations depending on config
+if [ -f "${BINARIES_DIR}/grubx64.efi" ]; then
+    cp "${BINARIES_DIR}/grubx64.efi" "${BINARIES_DIR}/grub-efi.efi"
+elif [ -f "${BINARIES_DIR}/grub.efi" ]; then
+    cp "${BINARIES_DIR}/grub.efi" "${BINARIES_DIR}/grub-efi.efi"
+elif [ -f "${BINARIES_DIR}/efi-part/EFI/BOOT/bootx64.efi" ]; then
+    cp "${BINARIES_DIR}/efi-part/EFI/BOOT/bootx64.efi" "${BINARIES_DIR}/grub-efi.efi"
+else
+    echo "ERROR: Could not find GRUB2 EFI binary (grubx64.efi or grub.efi)!"
+    exit 1
+fi
 
 rm -rf "${GENIMAGE_TMP}"
 
