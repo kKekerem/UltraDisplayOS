@@ -14,6 +14,7 @@ cd "${CLIENT_BUILD_DIR}"
 
 cmake "${REPO_DIR}" \
     -DCMAKE_TOOLCHAIN_FILE="${REPO_DIR}/buildroot-src/output/host/share/buildroot/toolchainfile.cmake" \
+    -DPKG_CONFIG_EXECUTABLE="${REPO_DIR}/buildroot-src/output/host/bin/pkgconf" \
     -DCMAKE_BUILD_TYPE=Release
 
 make -j$(nproc)

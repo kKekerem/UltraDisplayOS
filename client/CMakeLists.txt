@@ -15,31 +15,25 @@ add_executable(ultradisplay_client
 )
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(DRM REQUIRED libdrm)
-pkg_check_modules(EVDEV REQUIRED libevdev)
-pkg_check_modules(VA REQUIRED libva)
-pkg_check_modules(VADRM REQUIRED libva-drm)
-pkg_check_modules(URING REQUIRED liburing)
-pkg_check_modules(ALSA REQUIRED alsa)
+pkg_check_modules(DRM REQUIRED IMPORTED_TARGET libdrm)
+pkg_check_modules(EVDEV REQUIRED IMPORTED_TARGET libevdev)
+pkg_check_modules(VA REQUIRED IMPORTED_TARGET libva)
+pkg_check_modules(VADRM REQUIRED IMPORTED_TARGET libva-drm)
+pkg_check_modules(URING REQUIRED IMPORTED_TARGET liburing)
+pkg_check_modules(ALSA REQUIRED IMPORTED_TARGET alsa)
 
 target_include_directories(ultradisplay_client PRIVATE 
-    ${CMAKE_SOURCE_DIR} 
-    ${DRM_INCLUDE_DIRS} 
-    ${EVDEV_INCLUDE_DIRS}
-    ${VA_INCLUDE_DIRS}
-    ${VADRM_INCLUDE_DIRS}
-    ${URING_INCLUDE_DIRS}
-    ${ALSA_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}
 )
 
 target_link_libraries(ultradisplay_client PRIVATE 
     shared
-    ${DRM_LIBRARIES}
-    ${EVDEV_LIBRARIES}
-    ${VA_LIBRARIES}
-    ${VADRM_LIBRARIES}
-    ${URING_LIBRARIES}
-    ${ALSA_LIBRARIES}
+    PkgConfig::DRM
+    PkgConfig::EVDEV
+    PkgConfig::VA
+    PkgConfig::VADRM
+    PkgConfig::URING
+    PkgConfig::ALSA
     ftxui::screen
     ftxui::dom
     ftxui::component
