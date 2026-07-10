@@ -21,7 +21,7 @@ const ftxui::Color Error      = ftxui::Color::RGB(239, 68, 68);   // #EF4444
 
 // UI Helper Decorators
 inline ftxui::Decorator window_box() {
-    return ftxui::border_styled(ftxui::ROUNDED) 
+    return ftxui::borderStyled(ftxui::ROUNDED) 
          | ftxui::bgcolor(Surface) 
          | ftxui::color(Text);
 }

@@ -65,8 +65,8 @@ Component TuiApp::build_ui_tree() {
 
     auto main_renderer = Renderer(tab_container, [this, tab_container] {
         if (is_overlay_mode_.load(std::memory_order_acquire)) {
-            return dbox({
-                emptyElement() | bgcolor(Color::Transparent),
+            return dbox(Elements{
+                tab_container->Render() | bgcolor(theme::Background),
                 overlay_screen_->Render() | center
             });
         }
