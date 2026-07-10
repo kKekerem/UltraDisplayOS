@@ -41,7 +41,7 @@ private:
     ftxui::Component main_container_;
     
     std::atomic<bool> is_overlay_mode_{false};
-    ScreenID current_screen_{ScreenID::Home};
+    ScreenID current_screen_{ScreenID::Wifi};
 
     // Components
     ftxui::Component home_screen_;
