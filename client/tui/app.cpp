@@ -11,9 +11,6 @@ TuiApp::TuiApp() = default;
 TuiApp::~TuiApp() = default;
 
 Result<void> TuiApp::init() {
-    auto screen_options = ScreenInteractive::Fullscreen();
-    screen_ = std::make_shared<ScreenInteractive>(screen_options);
-
     // Mock up empty components for now
     home_screen_ = Renderer([] { return text("Home Screen") | center; });
     settings_screen_ = Renderer([] { return text("Settings") | center; });
@@ -28,14 +25,14 @@ Result<void> TuiApp::init() {
 }
 
 void TuiApp::run() {
-    if (screen_) {
-        screen_->Loop(main_container_);
-    }
+    auto screen = ScreenInteractive::Fullscreen();
+    exit_closure_ = screen.ExitLoopClosure();
+    screen.Loop(main_container_);
 }
 
 void TuiApp::exit() {
-    if (screen_) {
-        screen_->Exit();
+    if (exit_closure_) {
+        exit_closure_();
     }
 }
 
